@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, ChangeEvent, DragEvent } from 'react';
+import { useRoomStore } from '../store/roomStore';
 import './ImageUploader.css'
+
 
 const ImageUploader = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
@@ -8,6 +10,8 @@ const ImageUploader = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewUrlRef = useRef<string | null>(null);
+
+  const setImageUrl = useRoomStore((state) => state.setImageUrl);
 
   const processFile = (file: File) => {
     try {
@@ -31,6 +35,7 @@ const ImageUploader = () => {
       const previewUrl = URL.createObjectURL(file);
       previewUrlRef.current = previewUrl;
       setImagePreviewUrl(previewUrl);
+      setImageUrl(previewUrl)
       setFileError(null);
       setUploadSuccess(true);
       
@@ -71,6 +76,7 @@ const ImageUploader = () => {
     }
     setImagePreviewUrl(null);
     setFileError(null);
+    setImageUrl(null)
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
