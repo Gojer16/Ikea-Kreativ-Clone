@@ -1,4 +1,3 @@
-// FurnitureItem.tsx
 import React, { useRef, useEffect, useState } from 'react';
 import { Group, Euler } from 'three';
 import { useThree } from '@react-three/fiber';
