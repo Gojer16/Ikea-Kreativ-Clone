@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import ChairModel from '../Models/ChairModel';
 import TableModel from '../Models/TableModel';
+import SofaModel from '../Models/SofaModel';
 
 export interface CatalogItem {
   id: string;
@@ -37,9 +38,15 @@ export const useFurnitureStore = create<FurnitureState>((set) => ({
     {
       id: 'table_01',
       name: 'Coffee Table',
-      imageUrl: 'https://placehold.co/150x150/f0f0f0/333?text=Table',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtbadNOIIuj_TDNHX96wEhR7T9ttqcLAksQA&s',
       model: TableModel
     },
+    {
+      id: 'Sofa_01',
+      name: 'Sofa for sleep',
+      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8woq2s31BHbXYY6tc9OCtOvifGnnPZPzd2A&s',
+      model: SofaModel
+    }
   ],
 
   placed: [],
