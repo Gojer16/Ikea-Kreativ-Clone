@@ -1,36 +1,60 @@
-import { useTexture } from '@react-three/drei';
+import React, { useEffect } from 'react';
+import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useEffect, useState } from 'react';
+import { TextureLoader } from 'three/src/loaders/TextureLoader';
+import { useRoomStore } from '../store/roomStore';
+import { roomTemplates } from '../constants/roomTemplate'; // Import template registry
 
-const RoomBackground = ({ imageUrl }: { imageUrl: string }) => {
-  const texture = useTexture(imageUrl);
-  const [aspectRatio, setAspectRatio] = useState(1);
-  const [planeSize, setPlaneSize] = useState<[number, number]>([10, 10]);
+const RoomBackground: React.FC = () => {
+  // Get background source from store
+  const { backgroundType, imageUrl, templateId } = useRoomStore(state => ({
+    backgroundType: state.backgroundType,
+    imageUrl: state.imageUrl,
+    templateId: state.templateId
+  }));
 
-  useEffect(() => {
-    if (!imageUrl) return;
+  // Determine final background URL
+  let backgroundUrl = '';
+  if (backgroundType === 'uploaded' && imageUrl) {
+    backgroundUrl = imageUrl;
+  } else if (backgroundType === 'template' && templateId) {
+    backgroundUrl = roomTemplates[templateId]?.background || '';
+  }
 
-    const img = new Image();
-    img.src = imageUrl;
-    img.onload = () => {
-      const ratio = img.width / img.height;
-      setAspectRatio(ratio);
+  // Load texture
+  const texture: THREE.Texture | undefined = useLoader(
+    TextureLoader,
+    backgroundUrl || '',
+    (loader) => { loader.crossOrigin = ''; }
+  );
 
-      const height = 6.25; 
-      const width = ratio * height;
-      setPlaneSize([width, height]);
-    };
-  }, [imageUrl]);
-
+  // Optimize texture settings
   useEffect(() => {
     if (texture) {
       texture.generateMipmaps = false;
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
-      texture.anisotropy = 1;
+      texture.anisotropy = texture?.anisotropy || 1;
       texture.needsUpdate = true;
     }
   }, [texture]);
+
+  // Calculate dimensions based on source
+  const getDimensions = (): [number, number] => {
+    if (backgroundType === 'template' && templateId) {
+      const template = roomTemplates[templateId];
+      return template 
+        ? [template.dimensions.width, template.dimensions.height] 
+        : [10, 10];
+    }
+    
+    // Default dimensions for uploaded images
+    return [10, 6.25];
+  };
+
+  const planeSize = getDimensions();
+
+  if (!backgroundUrl || !texture) return null;
 
   return (
     <mesh position={[0, 0, -1]} renderOrder={-1}>
