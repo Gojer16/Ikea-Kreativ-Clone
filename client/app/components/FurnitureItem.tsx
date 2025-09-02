@@ -1,10 +1,11 @@
+// FurnitureItem.tsx (Modified to enable vertical dragging)
 import React, { useRef, useEffect, useState } from 'react';
 import { Group, Euler } from 'three';
 import { useThree } from '@react-three/fiber';
 import { TransformControls, Html } from '@react-three/drei';
 import type { TransformControls as TransformControlsImpl } from 'three-stdlib';
-import { GRID_CELL_SIZE } from '../constants/gridSettings';
-import { useSelectionStore } from '../store/useSelectionStore'; // Make sure this points to the selection-specific store
+import { GRID_CELL_SIZE, SNAP_THRESHOLD } from '../constants/gridSettings';
+import { useSelectionStore } from '../store/useSelectionStore';
 import { useFurnitureStore } from '../store/useFurnitureStore';
 
 interface ModelComponentOwnProps {
@@ -27,8 +28,6 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
   const controlsRef = useRef<TransformControlsImpl>(null!);
   const { camera, gl } = useThree();
 
-  // --- FIX IS HERE ---
-  // Select both state and actions explicitly from the store
   const { selectedObject, setSelectedObject } = useSelectionStore((state) => ({
     selectedObject: state.selectedObject,
     setSelectedObject: state.setSelectedObject,
@@ -41,7 +40,16 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
 
   const isSelected = selectedObject === id;
 
-  // ... (rest of your component code, it should now work correctly)
+  useEffect(() => {
+    if (!isSelected) {
+      document.body.style.cursor = isHovered ? 'grab' : 'default';
+    } else {
+      document.body.style.cursor = 'default';
+    }
+    return () => {
+        document.body.style.cursor = 'default';
+    };
+  }, [isHovered, isSelected]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -53,10 +61,6 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
     return () => window.removeEventListener('keydown', onKey);
   }, [isSelected]);
 
-  useEffect(() => {
-    document.body.style.cursor = isHovered ? 'grab' : 'default';
-  }, [isHovered]);
-
   const instance = (
     <ModelComponent
       ref={ref}
@@ -64,13 +68,27 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
       rotation={new Euler(...initialRotation)}
       onClick={(e) => {
         e.stopPropagation();
-        setSelectedObject(id); // This will now be a function
+        setSelectedObject(id);
       }}
-      onPointerOver={(e) => { e.stopPropagation(); setIsHovered(true); }}
-      onPointerOut={(e) => { e.stopPropagation(); setIsHovered(false); }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setIsHovered(true);
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        setIsHovered(false);
+      }}
     >
       {isHovered && !isSelected && (
-        <meshStandardMaterial attach="material" color="#aaaaaa" emissive="#222222" transparent opacity={0.8} />
+        <meshStandardMaterial
+          attach="material"
+          color="#ADD8E6"
+          emissive="#222222"
+          transparent
+          opacity={0.3}
+          depthTest={false}
+          depthWrite={false}
+        />
       )}
     </ModelComponent>
   );
@@ -82,17 +100,30 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
           ref={controlsRef}
           object={ref.current}
           mode={mode}
+          // --- CHANGE HERE: REMOVE showY={false} OR SET TO true ---
+          // Removing it allows TransformControls to show the Y-axis handle by default
+          // If you explicitly want to show it, you could also set showY={true}
+          // showY={false} <-- REMOVE THIS LINE or change to showY={true}
           onMouseUp={() => {
             if (ref.current) {
               const newPos = ref.current.position;
               const newRot = ref.current.rotation;
 
-              newPos.y = 0;
+              // --- IMPORTANT: Decide if you want to keep forcing Y=0 ---
+              // If you want to allow *any* vertical movement, you MUST remove this line.
+              // If you want it to be movable vertically *during* drag, but always snap to Y=0 on release, keep it.
+              // Given "I can't move the furniture vertically", I assume you want to allow free vertical movement.
+              // So, commenting it out allows the Y position to persist after drag.
+              // newPos.y = 0; // <-- COMMENT OUT OR REMOVE THIS LINE TO ALLOW FREE VERTICAL MOVEMENT
 
               (['x', 'z'] as const).forEach((axis) => {
-                const val = newPos[axis];
-                const snap = Math.round(val / GRID_CELL_SIZE) * GRID_CELL_SIZE;
-                newPos[axis] = snap;
+                const currentVal = newPos[axis];
+                const nearestGridCenter = Math.round(currentVal / GRID_CELL_SIZE) * GRID_CELL_SIZE;
+                const distanceToNearestCenter = Math.abs(currentVal - nearestGridCenter);
+
+                if (distanceToNearestCenter < SNAP_THRESHOLD) {
+                  newPos[axis] = nearestGridCenter;
+                }
               });
 
               updateItemTransform(id, [newPos.x, newPos.y, newPos.z], [newRot.x, newRot.y, newRot.z]);

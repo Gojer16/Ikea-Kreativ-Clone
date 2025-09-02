@@ -6,4 +6,6 @@ const TableModel = forwardRef((props, ref) => {
   return <primitive ref={ref} object={scene} {...props} />;
 });
 
+TableModel.displayName = "TableModel";
+
 export default TableModel;

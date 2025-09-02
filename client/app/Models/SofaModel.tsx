@@ -6,4 +6,6 @@ const SofaModel = forwardRef((props, ref) => {
   return <primitive ref={ref} object={scene} {...props} />;
 });
 
+SofaModel.displayName = "SofaModel";
+
 export default SofaModel;

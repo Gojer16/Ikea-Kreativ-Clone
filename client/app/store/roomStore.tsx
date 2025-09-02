@@ -1,3 +1,4 @@
+// src/store/useRoomStore.ts (Modified)
 import { create } from 'zustand';
 
 type BackgroundType = 'uploaded' | 'template' | null;
@@ -13,12 +14,23 @@ interface RoomState {
 }
 
 export const useRoomStore = create<RoomState>((set) => ({
-  backgroundType: null,
+  setBackgroundType: null,
   templateId: null,
   imageUrl: null,
-  setImageUrl: (url) => set({ imageUrl: url }),
-  setTemplateId: (id) => set({ templateId: id }),
-  setBackgroundType: (type) => set({ backgroundType: type }),
+
+  setImageUrl: (url) => set({
+    imageUrl: url,
+    templateId: null, // Clear template when an image is uploaded
+    backgroundType: 'uploaded', // Set type to uploaded
+  }),
+
+  setTemplateId: (id) => set({
+    templateId: id,
+    imageUrl: null, // Clear uploaded image when a template is selected
+    backgroundType: 'template', // Set type to template
+  }),
+
+  // clearRoomData remains the same
   clearRoomData: () =>
     set({
       imageUrl: null,

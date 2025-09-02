@@ -1,12 +1,15 @@
+// Scene.tsx (Modified to remove the grid)
 import React from 'react';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei'; // Remove Grid from import
 import { Suspense } from 'react';
 import { EffectComposer, Outline } from '@react-three/postprocessing';
 import { useRoomStore } from '../store/roomStore';
 import { useSelectionStore } from '../store/useSelectionStore';
 import RoomBackground from './RoomBackground';
 import FurnitureModels from './FurnitureModels';
+// Remove import for GRID_CELL_SIZE if it's only used for the grid visual
+// import { GRID_CELL_SIZE } from '../constants/gridSettings'; // You might still need this for snapping
 
 const Scene: React.FC = () => {
   const imageUrl = useRoomStore((s) => s.imageUrl);
@@ -44,6 +47,10 @@ const Scene: React.FC = () => {
         {imageUrl && <RoomBackground imageUrl={imageUrl} />}
         <FurnitureModels />
       </Suspense>
+
+      {/* REMOVED: Visual Grid Overlay */}
+      {/* <Grid ... /> was here */}
+
 
       {/* Global Outline Glow for Selected Items */}
       <EffectComposer multisampling={4}>

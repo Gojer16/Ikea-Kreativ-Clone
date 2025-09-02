@@ -6,4 +6,6 @@ const ChairModel = forwardRef((props, ref) => {
   return <primitive ref={ref} object={scene} {...props} />;
 });
 
+ChairModel.displayName = "ChairModel";
+
 export default ChairModel;

@@ -8,11 +8,14 @@ import Scene from "./components/Scene";
 export default function Home() {
   return (
    <>
-    <h1 className="text-3xl font-bold text-red-500">Hello, World !</h1>
+    <h1 className="text-3xl font-bold text-red-500 ">Hello, World !</h1>
     <ImageUploader />
     <RoomTemplateSelector />
     <FurnitureSelector />
-    <Scene />
+    <div className="min-h-screen">
+      <Scene />
+    </div>
+
    </>
   );
 }
