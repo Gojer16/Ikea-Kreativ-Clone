@@ -17,6 +17,7 @@ const RoomBackground: React.FC = () => {
     templateId: state.templateId,
   }));
 
+
   let backgroundUrl = '';
   if (backgroundType === 'uploaded' && imageUrl) {
     backgroundUrl = imageUrl;
@@ -24,9 +25,9 @@ const RoomBackground: React.FC = () => {
     backgroundUrl = roomTemplates.find(t => t.id === templateId)?.imageUrl || '';
   }
 
-  const texture = backgroundUrl
-    ? useLoader(TextureLoader, backgroundUrl, (loader) => { loader.crossOrigin = ''; })
-    : undefined;
+  // Always call useLoader, but pass a fallback image if backgroundUrl is empty
+  const fallbackUrl = '/public/assets/templates/OIP.jpg';
+  const texture = useLoader(TextureLoader, backgroundUrl || fallbackUrl, (loader) => { loader.crossOrigin = ''; });
 
   // State to hold the calculated dimensions of the plane geometry
   const [planeDimensions, setPlaneDimensions] = useState<[number, number]>([MAX_PLANE_WIDTH, MAX_PLANE_WIDTH * 0.625]); // Default aspect ratio (16:10 or 10:6.25)

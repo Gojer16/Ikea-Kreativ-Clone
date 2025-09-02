@@ -178,11 +178,16 @@ const ImageUploader = () => {
             </div>
           ) : (
             <div className="relative rounded-xl overflow-hidden shadow-md animate-fadeIn">
-              <img
-                src={imagePreviewUrl}
-                alt="Room preview"
-                className="w-full h-auto max-h-80 object-contain transition-opacity duration-300"
-              />
+              {imagePreviewUrl && (
+                <Image
+                  src={imagePreviewUrl}
+                  alt="Room preview"
+                  width={400}
+                  height={320}
+                  className="w-full h-auto max-h-80 object-contain transition-opacity duration-300"
+                  style={{ objectFit: 'contain' }}
+                />
+              )}
               <button
                 onClick={clearImage}
                 className="absolute top-3 right-3 bg-red-500 text-white p-1.5 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"

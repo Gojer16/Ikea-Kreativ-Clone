@@ -8,13 +8,14 @@ import { GRID_CELL_SIZE, SNAP_THRESHOLD } from '../constants/gridSettings';
 import { useSelectionStore } from '../store/useSelectionStore';
 import { useFurnitureStore } from '../store/useFurnitureStore';
 
+
 interface ModelComponentOwnProps {
   position?: [number, number, number];
   rotation?: [number, number, number];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
-type ForwardRefComponent<T, P = {}> = React.ForwardRefExoticComponent<P & React.RefAttributes<T>>;
+type ForwardRefComponent<T, P = object> = React.ForwardRefExoticComponent<P & React.RefAttributes<T>>;
 
 interface FurnitureItemProps {
   model: ForwardRefComponent<Group, ModelComponentOwnProps>;
@@ -26,7 +27,7 @@ interface FurnitureItemProps {
 const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRotation }: FurnitureItemProps) => {
   const ref = useRef<Group>(null!);
   const controlsRef = useRef<TransformControlsImpl>(null!);
-  const { camera, gl } = useThree();
+  // const { camera, gl } = useThree();
 
   const { selectedObject, setSelectedObject } = useSelectionStore((state) => ({
     selectedObject: state.selectedObject,
@@ -65,16 +66,16 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
     <ModelComponent
       ref={ref}
       position={initialPosition}
-      rotation={new Euler(...initialRotation)}
-      onClick={(e) => {
+  rotation={initialRotation}
+      onClick={(e: React.PointerEvent) => {
         e.stopPropagation();
         setSelectedObject(id);
       }}
-      onPointerOver={(e) => {
+      onPointerOver={(e: React.PointerEvent) => {
         e.stopPropagation();
         setIsHovered(true);
       }}
-      onPointerOut={(e) => {
+      onPointerOut={(e: React.PointerEvent) => {
         e.stopPropagation();
         setIsHovered(false);
       }}

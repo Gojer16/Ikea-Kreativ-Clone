@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useFurnitureStore, CatalogItem } from '../store/useFurnitureStore';
 
 const FurnitureSelector = () => {
@@ -19,10 +20,13 @@ const FurnitureSelector = () => {
               focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200
             "
           >
-            <img
+            <Image
               src={item.imageUrl}
               alt={item.name}
+              width={144}
+              height={96}
               className="w-full h-24 object-contain rounded-t-lg bg-gray-100 p-2"
+              style={{ objectFit: 'contain', background: '#f3f4f6', padding: '0.5rem' }}
             />
             <div className="p-2 text-center">
               <p className="text-sm font-medium text-gray-700 truncate">{item.name}</p>
