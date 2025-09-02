@@ -3,7 +3,7 @@
  * useImageUploader (custom hook)
  *
  * What:
- * - Encapsulates all image upload state and behavior (drag/drop, file validation,
+ * - Encapsulates image upload state and behavior (drag/drop, file validation,
  *   preview creation and cleanup, errors, file input ref).
  *
  * Returned values:
@@ -30,8 +30,8 @@ export default function useImageUploader() {
     if (previewUrlRef.current) {
       try {
         URL.revokeObjectURL(previewUrlRef.current);
-      } catch (e) {
-        // ignore
+      } catch {
+        // ignore potential errors from revokeObjectURL
       }
       previewUrlRef.current = null;
     }
@@ -73,20 +73,34 @@ export default function useImageUploader() {
     }
   };
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-  // removed lingering 'e' reference
+  // Handler: file input change
+  const handleImageChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const file = ev.target.files?.[0];
+    if (file) {
+      processFile(file);
+    }
   };
 
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-  // removed lingering 'e' reference
+  // Handler: drag over the drop area
+  const handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
+    // prevent default so drop event will fire and browser won't open file
+    ev.preventDefault();
+    setIsDragOver(true);
   };
 
+  // Handler: drag leaves the drop area
   const handleDragLeave = () => {
     setIsDragOver(false);
   };
 
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-  // removed lingering 'e' reference
+  // Handler: drop file into drop area
+  const handleDrop = (ev: DragEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+    setIsDragOver(false);
+    const file = ev.dataTransfer.files?.[0];
+    if (file) {
+      processFile(file);
+    }
   };
 
   const clearImage = () => {
@@ -94,14 +108,14 @@ export default function useImageUploader() {
     revokePreview();
     setImagePreviewUrl(null);
     setFileError(null);
-    setImageUrl(''); 
+    setImageUrl(''); // keep as string to avoid TS mismatch with your current store typing
     setUploadSuccess(false);
 
     if (fileInputRef.current) {
       try {
         fileInputRef.current.value = '';
-      } catch (e) {
-        // ignore
+      } catch {
+        // ignore potential read-only errors in some browsers
       }
     }
   };
@@ -115,6 +129,7 @@ export default function useImageUploader() {
     return () => {
       revokePreview();
     };
+
   }, []);
 
   return {
