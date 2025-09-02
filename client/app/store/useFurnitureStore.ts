@@ -1,20 +1,25 @@
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
+
 import ChairModel from '../Models/ChairModel';
 import TableModel from '../Models/TableModel';
 import SofaModel from '../Models/SofaModel';
+import type { Group } from 'three';
+import type { ForwardRefComponent, ModelComponentOwnProps } from '../components/FurnitureItem';
+
 
 export interface CatalogItem {
   id: string;
   name: string;
   imageUrl: string;
-  model: React.FC;
+  model: ForwardRefComponent<Group, ModelComponentOwnProps>;
 }
+
 
 export interface PlacedItem {
   instanceId: string;
   catalogId: string;
-  model: React.FC;
+  model: ForwardRefComponent<Group, ModelComponentOwnProps>;
   position: [number, number, number];
   rotation: [number, number, number];
 }

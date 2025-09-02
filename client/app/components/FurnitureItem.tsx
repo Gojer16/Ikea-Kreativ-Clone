@@ -8,13 +8,13 @@ import { useSelectionStore } from '../store/useSelectionStore';
 import { useFurnitureStore } from '../store/useFurnitureStore';
 
 
-interface ModelComponentOwnProps {
+export interface ModelComponentOwnProps {
   position?: [number, number, number];
   rotation?: [number, number, number];
   [key: string]: unknown;
 }
 
-type ForwardRefComponent<T, P = object> = React.ForwardRefExoticComponent<P & React.RefAttributes<T>>;
+export type ForwardRefComponent<T, P = object> = React.ForwardRefExoticComponent<P & React.RefAttributes<T>>;
 
 interface FurnitureItemProps {
   model: ForwardRefComponent<Group, ModelComponentOwnProps>;
