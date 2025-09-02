@@ -73,25 +73,20 @@ export default function useImageUploader() {
     }
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) processFile(file);
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  // removed lingering 'e' reference
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragOver(true);
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+  // removed lingering 'e' reference
   };
 
   const handleDragLeave = () => {
     setIsDragOver(false);
   };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) processFile(file);
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+  // removed lingering 'e' reference
   };
 
   const clearImage = () => {

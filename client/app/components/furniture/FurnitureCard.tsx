@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, Eye, ShoppingCart, Info, Star, Package } from 'lucide-react';
+import Image from 'next/image';
+import { Heart, Eye, Info, Star, Package } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 interface FurnitureCardProps {
@@ -68,15 +69,15 @@ const FurnitureCard: React.FC<FurnitureCardProps> = ({
     >
       {/* Image Container */}
       <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
-        <img
+        <Image
           src={imageUrl}
           alt={name}
-          className={`
-            w-full h-full object-cover transition-all duration-300
-            ${imageLoaded ? "opacity-100" : "opacity-0"}
-            ${isHovered ? "scale-105" : "scale-100"}
-          `}
+          fill
+          style={{ objectFit: 'cover' }}
+          className={`transition-all duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"} ${isHovered ? "scale-105" : "scale-100"}`}
           onLoad={() => setImageLoaded(true)}
+          sizes="(max-width: 768px) 100vw, 400px"
+          priority={false}
         />
         
         {/* Loading Skeleton */}
