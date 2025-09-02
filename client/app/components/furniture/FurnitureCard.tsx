@@ -1,3 +1,10 @@
+/**
+ * FurnitureCard
+ *
+ * What:
+ * - Card component that renders a single furniture item (image, meta, actions).
+ */
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Heart, Eye, Info, Star, Package } from 'lucide-react';
@@ -57,6 +64,8 @@ const FurnitureCard: React.FC<FurnitureCardProps> = ({
 
   return (
     <div
+      id={`furniture-${id}`}
+      data-furniture-id={id}
       className={`
         group relative bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden
         hover:shadow-lg hover:border-blue-300 transition-all duration-300
