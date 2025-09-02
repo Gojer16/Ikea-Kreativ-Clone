@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { roomTemplates } from '../constants/roomTemplate';
 import { useRoomStore } from '../store/roomStore';
 
