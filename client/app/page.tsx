@@ -1,7 +1,7 @@
 'use client';
 import FurnitureSelector from "./components/FurnitureSelector";
 import ImageUploader from "./components/ImageUploader";
-import { Preview } from "./components/Preview";
+
 import RoomTemplateSelector from "./components/RoomTemplateSelector";
 import Scene from "./components/Scene";
 

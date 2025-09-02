@@ -52,9 +52,11 @@ const RoomTemplateSelector = () => {
                 }
               `}
             >
-              <img
+              <Image
                 src={template.imageUrl}
                 alt={template.name}
+                width={150}
+                height={96}
                 className="w-full h-24 object-cover rounded-t-lg pointer-events-none"
               />
               <div className="text-sm text-center p-2 font-medium">{template.name}</div>

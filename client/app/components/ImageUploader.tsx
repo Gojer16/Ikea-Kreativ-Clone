@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState, useRef, useEffect, ChangeEvent, DragEvent } from 'react';
 import { useRoomStore } from '../store/roomStore';
 import './ImageUploader.css'

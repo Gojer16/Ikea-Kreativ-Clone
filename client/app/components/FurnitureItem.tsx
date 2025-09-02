@@ -1,7 +1,6 @@
 // FurnitureItem.tsx (Modified to enable vertical dragging)
 import React, { useRef, useEffect, useState } from 'react';
-import { Group, Euler } from 'three';
-import { useThree } from '@react-three/fiber';
+import { Group } from 'three';
 import { TransformControls, Html } from '@react-three/drei';
 import type { TransformControls as TransformControlsImpl } from 'three-stdlib';
 import { GRID_CELL_SIZE, SNAP_THRESHOLD } from '../constants/gridSettings';
