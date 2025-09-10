@@ -1,6 +1,8 @@
 # Ikea Kreativ-Inspired Room Designer (1-week Prototype)
 
-This is a small frontend-only prototype inspired by Ikea Kreativ. It was commissioned as a quick proof-of-concept. After ~1 week of development, the client went silent before I could even demo the work. I'm open-sourcing the prototype here as a portfolio artifact.
+🚀 [Live Demo](https://ikea-project-nine.vercel.app/)
+
+This was built as a 1-week proof-of-concept prototype inspired by Ikea Kreativ. While the project didn't continue, I decided to open-source it as a portfolio artifact.
 
 ## Highlights
 - Room templates and custom image backgrounds
@@ -15,14 +17,12 @@ This is a small frontend-only prototype inspired by Ikea Kreativ. It was commiss
 
 <p align="left">
   <img alt="Next.js" src="https://img.shields.io/badge/Next.js-000?logo=next.js&logoColor=fff" />
-  <img alt="React" src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff" />
   <img alt="Three.js" src="https://img.shields.io/badge/Three.js-000000?logo=three.js&logoColor=white" />
   <img alt="React Three Fiber" src="https://img.shields.io/badge/React%20Three%20Fiber-000?logo=react&logoColor=61DAFB" />
   <img alt="Zustand" src="https://img.shields.io/badge/Zustand-000?logo=react&logoColor=white" />
   <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white" />
   <img alt="Vercel" src="https://img.shields.io/badge/Vercel-000?logo=vercel&logoColor=white" />
-  <img alt="ESLint" src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white" />
 </p>
 
 - Next.js (App Router) for UI and bundling
