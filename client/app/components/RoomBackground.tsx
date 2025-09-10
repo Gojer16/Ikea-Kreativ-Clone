@@ -17,22 +17,14 @@ const RoomBackground: React.FC = () => {
   }));
 
 
+  const fallbackUrl = '/assets/templates/OIP.jpg';
   let backgroundUrl = '';
   if (backgroundType === 'uploaded' && imageUrl) {
     backgroundUrl = imageUrl;
   } else if (backgroundType === 'template' && templateId) {
     backgroundUrl = roomTemplates.find(t => t.id === templateId)?.imageUrl || '';
   }
-
-  // Always call useLoader, but pass a fallback image if backgroundUrl is empty
-  // In Next.js, assets in public/ are referenced from root ('/'), not '/public'
-  const fallbackUrl = '/assets/templates/OIP.jpg';
-  let texture: THREE.Texture | null = null;
-  try {
-    texture = useLoader(TextureLoader, backgroundUrl || fallbackUrl, (loader) => { loader.crossOrigin = ''; });
-  } catch {
-    // Keep texture null; ErrorBoundary will cover rendering issues
-  }
+  const texture = useLoader(TextureLoader, backgroundUrl || fallbackUrl, (loader) => { loader.crossOrigin = ''; });
 
   // State to hold the calculated dimensions of the plane geometry
   const [planeDimensions, setPlaneDimensions] = useState<[number, number]>([MAX_PLANE_WIDTH, MAX_PLANE_WIDTH * 0.625]); // Default aspect ratio (16:10 or 10:6.25)
