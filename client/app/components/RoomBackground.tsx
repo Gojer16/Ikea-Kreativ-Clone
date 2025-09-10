@@ -1,4 +1,3 @@
-// RoomBackground.tsx
 import React, { useEffect, useState } from 'react';
 import { useLoader, useThree } from '@react-three/fiber'; // Import useThree for renderer capabilities
 import * as THREE from 'three';
@@ -26,8 +25,14 @@ const RoomBackground: React.FC = () => {
   }
 
   // Always call useLoader, but pass a fallback image if backgroundUrl is empty
-  const fallbackUrl = '/public/assets/templates/OIP.jpg';
-  const texture = useLoader(TextureLoader, backgroundUrl || fallbackUrl, (loader) => { loader.crossOrigin = ''; });
+  // In Next.js, assets in public/ are referenced from root ('/'), not '/public'
+  const fallbackUrl = '/assets/templates/OIP.jpg';
+  let texture: THREE.Texture | null = null;
+  try {
+    texture = useLoader(TextureLoader, backgroundUrl || fallbackUrl, (loader) => { loader.crossOrigin = ''; });
+  } catch {
+    // Keep texture null; ErrorBoundary will cover rendering issues
+  }
 
   // State to hold the calculated dimensions of the plane geometry
   const [planeDimensions, setPlaneDimensions] = useState<[number, number]>([MAX_PLANE_WIDTH, MAX_PLANE_WIDTH * 0.625]); // Default aspect ratio (16:10 or 10:6.25)

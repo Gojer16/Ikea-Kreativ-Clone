@@ -5,15 +5,11 @@ import { useRoomStore } from '../store/roomStore';
 const RoomTemplateSelector = () => {
   // Get both setters and current state from the store
   const { 
-    setImageUrl, 
     setTemplateId, 
-    setBackgroundType,
     currentTemplateId, // Assuming this is the name in your store
     backgroundType 
   } = useRoomStore((state) => ({
-    setImageUrl: state.setImageUrl,
     setTemplateId: state.setTemplateId,
-    setBackgroundType: state.setBackgroundType,
     currentTemplateId: state.templateId, // Get the currently active template ID
     backgroundType: state.backgroundType,
   }));
@@ -22,9 +18,7 @@ const RoomTemplateSelector = () => {
     const template = roomTemplates.find((t) => t.id === templateId);
     if (!template) return;
 
-    setImageUrl(template.imageUrl);
     setTemplateId(template.id);
-    setBackgroundType('template');
   };
 
   return (

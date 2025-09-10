@@ -1,9 +1,8 @@
-// FurnitureItem.tsx (Modified to enable vertical dragging)
 import React, { useRef, useEffect, useState } from 'react';
 import { Group } from 'three';
 import { TransformControls, Html } from '@react-three/drei';
 import type { TransformControls as TransformControlsImpl } from 'three-stdlib';
-import { GRID_CELL_SIZE, SNAP_THRESHOLD } from '../constants/gridSettings';
+import { GRID_CELL_SIZE, SNAP_THRESHOLD, PLANE_BOUNDS_XZ } from '../constants/gridSettings';
 import { useSelectionStore } from '../store/useSelectionStore';
 import { useFurnitureStore } from '../store/useFurnitureStore';
 
@@ -61,6 +60,13 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
     return () => window.removeEventListener('keydown', onKey);
   }, [isSelected]);
 
+  const clampToBounds = (x: number, z: number) => {
+    const max = PLANE_BOUNDS_XZ;
+    const clampedX = Math.max(-max, Math.min(max, x));
+    const clampedZ = Math.max(-max, Math.min(max, z));
+    return { x: clampedX, z: clampedZ };
+  };
+
   const instance = (
     <ModelComponent
       ref={ref}
@@ -116,11 +122,16 @@ const FurnitureItem = ({ model: ModelComponent, id, initialPosition, initialRota
               // So, commenting it out allows the Y position to persist after drag.
               // newPos.y = 0; // <-- COMMENT OUT OR REMOVE THIS LINE TO ALLOW FREE VERTICAL MOVEMENT
 
+              // Clamp to simple plane bounds
+              const clamped = clampToBounds(newPos.x, newPos.z);
+              newPos.x = clamped.x;
+              newPos.z = clamped.z;
+
+              // Snap to grid when close
               (['x', 'z'] as const).forEach((axis) => {
                 const currentVal = newPos[axis];
                 const nearestGridCenter = Math.round(currentVal / GRID_CELL_SIZE) * GRID_CELL_SIZE;
                 const distanceToNearestCenter = Math.abs(currentVal - nearestGridCenter);
-
                 if (distanceToNearestCenter < SNAP_THRESHOLD) {
                   newPos[axis] = nearestGridCenter;
                 }
