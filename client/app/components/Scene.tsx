@@ -1,5 +1,6 @@
 'use client';
 import React, { Suspense } from 'react';
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stats } from '@react-three/drei';
 import { EffectComposer, Outline } from '@react-three/postprocessing';
@@ -76,45 +77,25 @@ const Scene: React.FC = () => {
 
   // Register capture and fit handlers
   // We'll set them up via refs after Canvas mounts
-  const glRef = React.useRef<any>(null);
-  const cameraRef = React.useRef<any>(null);
+  const glRef = React.useRef<THREE.WebGLRenderer | null>(null);
+  const cameraRef = React.useRef<THREE.Camera | null>(null);
 
-  React.useEffect(() => {
-    const capture = () => {
-      try {
-        const gl = glRef.current;
-        if (!gl) return null;
-        return gl.domElement.toDataURL('image/png');
-      } catch {
-        return null;
-      }
-    };
-    const fit = () => {
-      try {
-        const cam = cameraRef.current;
-        if (!cam) return;
-        cam.position.set(0, 0, 6);
-        cam.updateProjectionMatrix();
-      } catch {}
-    };
-    // can't import here, so use window store setter via dynamic import pattern is not feasible.
-  }, []);
+  // Removed unused capture and fit functions and any types
 
   return (
     <Canvas
       camera={{ position: [0, 0, 6], fov: 50 }}
       style={{ width: '100%', height: '65vh' }}
-      onPointerMissed={handlePointerMissed}
+  onPointerMissed={handlePointerMissed}
       onCreated={({ gl, camera }) => {
         // register screenshot/fit into UI store
         try {
-          const { useUiStore } = require('../store/useUiStore');
           const setCaptureFn = useUiStore.getState().setCaptureFn;
           const setFitFn = useUiStore.getState().setFitFn;
           const setCameraPresetRunner = useUiStore.getState().setCameraPresetRunner;
           glRef.current = gl;
           cameraRef.current = camera;
-          setCaptureFn(() => () => {
+          setCaptureFn(() => {
             try { return gl.domElement.toDataURL('image/png'); } catch { return null; }
           });
           setFitFn(() => () => {

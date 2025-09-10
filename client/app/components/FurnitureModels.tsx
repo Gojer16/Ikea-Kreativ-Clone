@@ -5,7 +5,6 @@ import { Html } from '@react-three/drei';
 
 const FurnitureModels: React.FC = () => { // Added React.FC type for clarity
   const placedFurniture = useFurnitureStore((state) => state.placed);
-  const removeFromRoom = useFurnitureStore((s) => s.removeFromRoom);
 
   return (
     <>

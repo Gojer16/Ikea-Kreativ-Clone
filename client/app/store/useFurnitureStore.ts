@@ -42,7 +42,6 @@ interface FurnitureState {
 
 type HistoryState = { past: PlacedItem[][]; future: PlacedItem[][] };
 
-const initialHistory: HistoryState = { past: [], future: [] };
 
 export const useFurnitureStore = create<FurnitureState & HistoryState>((set, get) => ({
   available: [
